@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+import { mod } from 'three/src/nodes/TSL.js'
 
 /**
  * Base
@@ -23,6 +24,8 @@ const scene = new THREE.Scene()
  */
 // Texture loader
 const textureLoader = new THREE.TextureLoader()
+const bakedT = textureLoader.load('/am bakon.jpg')
+bakedT.flipY = false
 
 // Draco loader
 const dracoLoader = new DRACOLoader()
@@ -32,19 +35,24 @@ dracoLoader.setDecoderPath('draco/')
 const gltfLoader = new GLTFLoader()
 gltfLoader.setDRACOLoader(dracoLoader)
 
-gltfLoader.load( '/'(gltf) =>{
-
+const bakedMateril = new THREE.MeshBasicMaterial({map: bakedT})
+// bakedMateril.map = bakedMateril
+gltfLoader.load( '/render6.glb',(model) =>{
+    model.scene.traverse( (child) =>{
+        child.material = bakedMateril
+    })
+    scene.add(model.scene)
 })
 
-/**
- * Object
- */
-const cube = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial()
-)
+// /**
+//  * Object
+//  */
+// const cube = new THREE.Mesh(
+//     new THREE.BoxGeometry(1, 1, 1),
+//     new THREE.MeshBasicMaterial()
+// )
 
-scene.add(cube)
+// scene.add(cube)
 
 /**
  * Sizes
