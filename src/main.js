@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
-import { mod } from 'three/src/nodes/TSL.js'
+
 
 /**
  * Base
@@ -26,6 +26,7 @@ const scene = new THREE.Scene()
 const textureLoader = new THREE.TextureLoader()
 const bakedT = textureLoader.load('/am bakon.jpg')
 bakedT.flipY = false
+bakedT.colorSpace = THREE.SRGBColorSpace
 
 // Draco loader
 const dracoLoader = new DRACOLoader()
@@ -36,11 +37,20 @@ const gltfLoader = new GLTFLoader()
 gltfLoader.setDRACOLoader(dracoLoader)
 
 const bakedMateril = new THREE.MeshBasicMaterial({map: bakedT})
+const poleLightMaterial = new THREE.MeshBasicMaterial({color: 0xffffe5})
+const portalLightMaterial = new THREE.MeshBasicMaterial({color: 0xffffff})
+
 // bakedMateril.map = bakedMateril
 gltfLoader.load( '/render6.glb',(model) =>{
-    model.scene.traverse( (child) =>{
-        child.material = bakedMateril
-    })
+    console.log(model.scene)
+    model.scene.traverse( child  => {child.material = bakedMateril})
+    const poleLightA = model.scene.children.find( child => child.name === 'Cube010')
+    const poleLightB = model.scene.children.find( child => child.name === 'Cube015')
+    const portalLight =  model.scene.children.find( child => child.name === 'Circle')
+
+    poleLightA.material = poleLightMaterial
+    poleLightB.material = poleLightMaterial
+    portalLight.material = portalLightMaterial
     scene.add(model.scene)
 })
 
