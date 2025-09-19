@@ -32,6 +32,10 @@ dracoLoader.setDecoderPath('draco/')
 const gltfLoader = new GLTFLoader()
 gltfLoader.setDRACOLoader(dracoLoader)
 
+gltfLoader.load( '/'(gltf) =>{
+
+})
+
 /**
  * Object
  */
